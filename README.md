@@ -1,18 +1,21 @@
-# Salesforce DX Project: Next Steps
+# Pardot's Export Activities - APEX Implementation
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+This project supports a series of blog posts on thespotforpardot.com (still to be published) around Pardot External Activities.
 
-## How Do You Plan to Deploy Your Changes?
+## Installation & Usage
+It is important to note that this APEX code cannot work by itself. It requires a Named Credential properly configured to communicate with Pardot. If you aren't interested in reading the complete series of blog posts (recommended), then please at least follow the steps in our [Connecting to Pardot API from APEX](https://thespotforpardot.com/2021/02/02/pardot-api-and-getting-ready-with-salesforce-sso-users-part-3a-connecting-to-pardot-api-from-apex/) blog post which details those steps.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+Once the Named credential is good to go, it is time to tweak the APEX code in this project, deploy, and then you are good to go.
 
-## Configure Your Salesforce DX Project
+## APEX Tweaks Required
+At a minimum, you will need to modify the value of `ONLY_ONE_BUSINESS_UNIT_ID` to be **your** Pardot Business Unit Id. Making this change, this code base will support an org with only one Pardot Business Unit.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+**Recommended** - you should take a look at the try/catch block to see how you will want to handle any potential API errors.
 
-## Read All About It
+### Working with Multiple Business Units
+This is where things get challenging, and your approach may vary depending on business case. Approaches may include:
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+- Include Business Unit ID as a Parameter to the Action, let the Flow designer worry about selecting the right one
+- Iterate PardotTenant to find the correct Business Unit Id(s)
+
+This code sample includes a set of commented-out code for handling the first approach. To leverage it, remove all code references to `ONLY_ONE_BUSINESS_UNIT_ID` and then un-comment-out the code that references `businessUnitId`. Once deployed, any Flows that existed prior will need to be modified.
